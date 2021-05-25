@@ -3,16 +3,25 @@ import snakeCase from 'lodash/snakeCase';
 import camelCase from 'lodash/camelCase';
 import { mapKeysDeep } from './index';
 
-const { GITHUB_URL } = process.env;
+// Todo change this later to process.env and debug why process not available
+const { GITHUB_URL, NODE_URL } = {
+  GITHUB_URL: 'https://api.github.com/',
+  NODE_URL: 'http://localhost:3000/'
+};
+
 const apiClients = {
   github: null,
-  default: null
+  default: null,
+  node: null
 };
 export const getApiClient = (type = 'github') => apiClients[type];
 export const generateApiClient = (type = 'github') => {
   switch (type) {
     case 'github':
       apiClients[type] = createApiClientWithTransForm(GITHUB_URL);
+      return apiClients[type];
+    case 'node':
+      apiClients[type] = createApiClientWithTransForm(NODE_URL);
       return apiClients[type];
     default:
       apiClients.default = createApiClientWithTransForm(GITHUB_URL);
